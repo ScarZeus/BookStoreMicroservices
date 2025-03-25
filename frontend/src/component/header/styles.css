@@ -1,7 +1,9 @@
 ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
 li {
@@ -12,8 +14,13 @@ li {
 
 .navigation {
     display: flex;
-    align-items: center;
+    align-items: center; 
+    justify-content: center;
     gap: 20px;
+}
+
+.navigation:hover{
+    cursor: pointer;
 }
 
 .header {
@@ -42,13 +49,21 @@ li {
 .search-bar input{
     outline: none;
     border: none;
-    margin: 2px;
-    padding-left: 30px;
+    margin: 4px;
+    padding-left: 20px;
+    height: 20px;
+    width: 150px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .search-bar svg{
     color: black;
-    margin: 2;
+    margin: 4px;
     padding-right: 5px;
 }
 
+#header-svg{
+    height: 30px;
+    width: 30px;
+}
