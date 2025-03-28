@@ -1,4 +1,4 @@
-package com.api.bookNest.config;
+package com.api.bookNest.config.auth;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
