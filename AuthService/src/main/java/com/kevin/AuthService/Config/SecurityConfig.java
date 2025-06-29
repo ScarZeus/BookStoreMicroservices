@@ -26,6 +26,7 @@ public class SecurityConfig {
 
     private final JwtFilterer jwtAuth;
     private final AppUserService customUserDetailService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
 
     @Bean
@@ -33,7 +34,10 @@ public class SecurityConfig {
         return http
                 .csrf(customizer-> customizer.disable())
                 .authorizeHttpRequests(auth->
-                        auth.requestMatchers("/api/v1/auth/**")
+                        auth.requestMatchers( "/api/v1/tokenAuth/login",
+                                        "/api/v1/tokenAuth/signup",
+                                        "/api/v1/auth/OAuthLogin"
+                                )
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
@@ -60,7 +64,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(12);
+        return passwordEncoder;
     }
 
 

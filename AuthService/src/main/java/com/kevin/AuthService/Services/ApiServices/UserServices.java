@@ -3,6 +3,9 @@ package com.kevin.AuthService.Services.ApiServices;
 import com.kevin.AuthService.Model.UserModel;
 import com.kevin.AuthService.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServices {
 
+    private final BCryptPasswordEncoder encoder;
     private final UserRepo userRepo;
 
     public UserModel getUserByEmailAddress(String emailAddress){
@@ -22,6 +26,10 @@ public class UserServices {
 
     public UserModel createNewUser(UserModel user){
         try{
+            if(userRepo.existsByEmailAddress(user.getEmailAddress())){
+                throw new RuntimeException("User Already Exist");
+            }
+            user.setPassword(encoder.encode(user.getPassword()));
             return userRepo.save(user);
         } catch (Exception e) {
             throw new RuntimeException("Cannot Create a new User "+ user.toString()+" : " + e);

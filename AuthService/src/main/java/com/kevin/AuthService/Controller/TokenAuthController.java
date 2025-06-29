@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/tokenAuth")
+@RestController("/api/v1/tokenAuth")
 @RequiredArgsConstructor
 public class TokenAuthController {
 
@@ -29,10 +29,17 @@ public class TokenAuthController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/signup")
     ResponseEntity<AuthResponseModel> signUp(@RequestBody UserModel user){
         try{
             AuthResponseModel response = authenticationService.authenticateNewUser(user);
+            return ResponseEntity.ok(response);
+        }
+        catch (Exception e){
+            AuthResponseModel response = authenticationService.authenticateNewUser(user);
+            return ResponseEntity.badRequest().body(response);
         }
     }
+
+
 }

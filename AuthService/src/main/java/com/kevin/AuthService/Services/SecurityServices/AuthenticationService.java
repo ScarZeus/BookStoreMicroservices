@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
     private final UserServices userService;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
@@ -54,10 +55,20 @@ public class AuthenticationService {
                             savedUser.getPassword()
                     )
             );
-            
+            String jwtToken = jwtService.generateJwtTokenWithUserDetails(savedUser);
+            return  AuthResponseModel
+                    .builder()
+                    .responseStatus(ResponseStatus.SUCCESS)
+                    .jwtToken(jwtToken)
+                    .build();
+
         }
         catch (Exception e){
-
+            return  AuthResponseModel
+                    .builder()
+                    .responseStatus(ResponseStatus.FAILED)
+                    .jwtToken("Token Not Available")
+                    .build();
         }
     }
 }
