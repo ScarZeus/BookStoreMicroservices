@@ -43,5 +43,22 @@ public class AuthenticationService {
                     .build();
         }
     }
+
+    public AuthResponseModel authenticateNewUser(UserModel user) {
+
+        try {
+            UserModel savedUser = userService.createNewUser(user);
+            authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            savedUser.getEmailAddress(),
+                            savedUser.getPassword()
+                    )
+            );
+            
+        }
+        catch (Exception e){
+
+        }
+    }
 }
 

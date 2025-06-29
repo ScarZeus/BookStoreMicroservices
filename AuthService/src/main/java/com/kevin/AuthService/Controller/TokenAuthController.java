@@ -3,6 +3,7 @@ package com.kevin.AuthService.Controller;
 
 import com.kevin.AuthService.Model.AuthRequestModel;
 import com.kevin.AuthService.Model.AuthResponseModel;
+import com.kevin.AuthService.Model.UserModel;
 import com.kevin.AuthService.Services.SecurityServices.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,13 @@ public class TokenAuthController {
         catch (Exception e){
             AuthResponseModel response = authenticationService.authenticate(request);
             return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PostMapping
+    ResponseEntity<AuthResponseModel> signUp(@RequestBody UserModel user){
+        try{
+            AuthResponseModel response = authenticationService.authenticateNewUser(user);
         }
     }
 }

@@ -20,5 +20,11 @@ public class UserServices {
         return user;
     }
 
-
+    public UserModel createNewUser(UserModel user){
+        try{
+            return userRepo.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot Create a new User "+ user.toString()+" : " + e);
+        }
+    }
 }
