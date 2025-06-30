@@ -16,8 +16,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,6 +34,7 @@ public class SecurityConfig {
     private final AppUserService customUserDetailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    private List<String> clients = Arrays.asList("google","facebook");
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -36,7 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers( "/api/v1/tokenAuth/login",
                                         "/api/v1/tokenAuth/signup",
-                                        "/api/v1/auth/OAuthLogin"
+                                        "/api/v1/OAuth/googleAuth",
+                                        "/api/v1/OAuth/facebookAuth"
                                 )
                                 .permitAll()
                                 .anyRequest()
@@ -46,6 +54,21 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuth, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository(){
+        List<ClientRegistration> registrations = clients.stream()
+                .map(client -> getClientRegistration(client))
+                .filter(registration -> registration!=null)
+                .collect(Collectors.toList());
+        return new
+    }
+
+    @Bean
+    public ClientRegistration getClientRegistration(String client){
+
+        return
     }
 
     @Bean

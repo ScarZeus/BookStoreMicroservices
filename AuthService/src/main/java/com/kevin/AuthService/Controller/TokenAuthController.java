@@ -40,6 +40,4 @@ public class TokenAuthController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-
-
 }
