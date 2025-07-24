@@ -2,8 +2,12 @@ package com.kevin.AuthService.Config;
 
 
 import com.kevin.AuthService.Filterer.JwtFilterer;
+import com.kevin.AuthService.Model.GoogleAuthPropertiesModel;
 import com.kevin.AuthService.Services.SecurityServices.AppUserService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,10 +18,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -28,7 +34,12 @@ import java.util.stream.Collectors;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
+@EnableConfigurationProperties(GoogleAuthPropertiesModel.class)
 public class SecurityConfig {
+
+    @Autowired
+    private GoogleAuthPropertiesModel googleProps;
+
 
     private final JwtFilterer jwtAuth;
     private final AppUserService customUserDetailService;
@@ -62,13 +73,20 @@ public class SecurityConfig {
                 .map(client -> getClientRegistration(client))
                 .filter(registration -> registration!=null)
                 .collect(Collectors.toList());
-        return new
+        return new InMemoryClientRegistrationRepository(registrations);
     }
 
     @Bean
     public ClientRegistration getClientRegistration(String client){
-
-        return
+            if(client == "google"){
+                return CommonOAuth2Provider
+                        .GOOGLE
+                        .getBuilder("google")
+                        .clientId(googleProps.getClientId())
+                        .clientSecret(googleProps.getClientSecret())
+                        .build();
+            }
+        return null;
     }
 
     @Bean
