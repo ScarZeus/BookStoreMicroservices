@@ -7,9 +7,10 @@ import com.kevin.AuthService.Services.SecurityServices.AppUserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+//import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,18 +35,15 @@ import java.util.stream.Collectors;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-@EnableConfigurationProperties(GoogleAuthPropertiesModel.class)
 public class SecurityConfig {
 
-    @Autowired
-    private GoogleAuthPropertiesModel googleProps;
 
-
+    private final GoogleAuthPropertiesModel googleProps;
     private final JwtFilterer jwtAuth;
     private final AppUserService customUserDetailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    private List<String> clients = Arrays.asList("google","facebook");
+    private List<String> clients = Arrays.asList("google");
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -78,10 +76,10 @@ public class SecurityConfig {
 
     @Bean
     public ClientRegistration getClientRegistration(String client){
-            if(client == "google"){
+            if("google".equals(client)){
                 return CommonOAuth2Provider
                         .GOOGLE
-                        .getBuilder("google")
+                        .getBuilder(client)
                         .clientId(googleProps.getClientId())
                         .clientSecret(googleProps.getClientSecret())
                         .build();
