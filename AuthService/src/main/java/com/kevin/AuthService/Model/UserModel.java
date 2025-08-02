@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -32,6 +33,10 @@ public class UserModel implements UserDetails {
     private String emailAddress;
 
     private String password;
+
+    private Date createdOn;
+
+    private Date updateOn;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -67,4 +72,6 @@ public class UserModel implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
