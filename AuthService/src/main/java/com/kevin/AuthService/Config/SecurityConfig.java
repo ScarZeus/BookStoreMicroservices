@@ -52,16 +52,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers( "/api/v1/tokenAuth/login",
                                         "/api/v1/tokenAuth/signup",
-                                        "/api/v1/OAuth/googleAuth",
-                                        "/api/v1/OAuth/facebookAuth"
+                                        "/api/v1/OAuth/**"
+
                                 )
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuth, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                .defaultSuccessUrl("/api/v1/OAuth/success", true)
+                .failureUrl("/api/v1/OAuth/failure")
+                        .redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig
+                                        .baseUri("/login/oauth2/code/google")
+
+                                )
+        )
                 .build();
     }
 

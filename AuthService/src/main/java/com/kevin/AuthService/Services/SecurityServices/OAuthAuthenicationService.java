@@ -15,9 +15,8 @@ public class OAuthAuthenicationService {
     private final UserServices userService;
 
     public AuthResponseModel validateUser(Map<String,Object> userCredentials){
-        try{
-            String useName = userCredentials.get
-        }
+        System.out.println(userCredentials.toString());
+        return null;
     }
 
 
