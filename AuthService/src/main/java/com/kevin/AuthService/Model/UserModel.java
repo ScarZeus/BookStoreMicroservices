@@ -1,10 +1,7 @@
 package com.kevin.AuthService.Model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +34,9 @@ public class UserModel implements UserDetails {
     private Date createdOn;
 
     private Date updateOn;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider authProvider;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
