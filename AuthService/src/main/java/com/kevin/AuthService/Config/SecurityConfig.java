@@ -4,17 +4,15 @@ package com.kevin.AuthService.Config;
 import com.kevin.AuthService.Filterer.JwtFilterer;
 import com.kevin.AuthService.Model.GoogleAuthPropertiesModel;
 import com.kevin.AuthService.Services.SecurityServices.AppUserService;
+import com.kevin.AuthService.handler.OAuthCustomHandler;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,7 +35,7 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
+    private final OAuthCustomHandler successHandler;
     private final GoogleAuthPropertiesModel googleProps;
     private final JwtFilterer jwtAuth;
     private final AppUserService customUserDetailService;
@@ -58,16 +56,11 @@ public class SecurityConfig {
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
-                .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuth, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(oauth2 -> oauth2
-                .defaultSuccessUrl("/api/v1/OAuth/success", true)
-                .failureUrl("/api/v1/OAuth/failure")
-                        .redirectionEndpoint(redirectionEndpointConfig -> redirectionEndpointConfig
-                                        .baseUri("/login/oauth2/code/google")
-
-                                )
+                .successHandler(successHandler)
         )
                 .build();
     }

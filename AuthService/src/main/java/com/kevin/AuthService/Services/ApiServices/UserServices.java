@@ -27,10 +27,24 @@ public class UserServices {
             if(userRepo.existsByEmailAddress(user.getEmailAddress())){
                 throw new RuntimeException("User Already Exist");
             }
-            user.setPassword(encoder.encode(user.getPassword()));
+            if(user.getPassword() !=null){
+                user.setPassword(encoder.encode(user.getPassword()));
+            }
             return userRepo.save(user);
         } catch (Exception e) {
             throw new RuntimeException("Cannot Create a new User "+ user.toString()+" : " + e);
+        }
+    }
+
+    public boolean doesUserExistsByEmail(String email){
+        try {
+            if(userRepo.existsByEmailAddress(email)){
+                return true;
+            }
+            return true;
+        }
+        catch (Exception e){
+            return false;
         }
     }
 }
