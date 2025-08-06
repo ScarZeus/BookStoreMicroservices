@@ -61,7 +61,7 @@ public class OAuthCustomHandler implements AuthenticationSuccessHandler {
         AuthResponseModel responseModel = new AuthResponseModel();
         responseModel.setResponseStatus(ResponseStatus.SUCCESS);
         responseModel.setJwtToken(jwtToken);
-        
+
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
 
