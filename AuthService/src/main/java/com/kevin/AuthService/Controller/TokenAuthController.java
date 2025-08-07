@@ -7,9 +7,9 @@ import com.kevin.AuthService.Model.UserModel;
 import com.kevin.AuthService.Services.SecurityServices.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController("/api/v1/tokenAuth")
 @RequiredArgsConstructor
@@ -39,5 +39,10 @@ public class TokenAuthController {
             AuthResponseModel response = authenticationService.authenticateNewUser(user);
             return ResponseEntity.badRequest().body(response);
         }
+    }
+
+    @GetMapping("/validateToken")
+    ResponseEntity<Map<String,Object>> validateToken(@RequestHeader("Authorization") String authHeader){
+        return null;
     }
 }
