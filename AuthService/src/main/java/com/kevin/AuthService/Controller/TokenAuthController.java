@@ -3,7 +3,9 @@ package com.kevin.AuthService.Controller;
 
 import com.kevin.AuthService.Model.AuthRequestModel;
 import com.kevin.AuthService.Model.AuthResponseModel;
+import com.kevin.AuthService.Model.EnumModel.ResponseStatus;
 import com.kevin.AuthService.Model.UserModel;
+import com.kevin.AuthService.Model.ValidatedTokenModel;
 import com.kevin.AuthService.Services.SecurityServices.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +44,12 @@ public class TokenAuthController {
     }
 
     @GetMapping("/validateToken")
-    ResponseEntity<Map<String,Object>> validateToken(@RequestHeader("Authorization") String authHeader){
-        return null;
-    }
+    ResponseEntity<ValidatedTokenModel> validateToken(@RequestHeader("Authorization") String authHeader){
+        String jwtToken = authHeader.substring(7);
+        try{
+                 return ResponseEntity.ok(authenticationService.authenticateToken(jwtToken));
+             } catch (Exception e) {
+            return ResponseEntity.ok(ValidatedTokenModel.builder().response(ResponseStatus.FAILED).build());
+        }
+        }
 }
