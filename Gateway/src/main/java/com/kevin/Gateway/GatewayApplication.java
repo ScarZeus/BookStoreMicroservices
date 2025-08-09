@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
+@EnableEurek
 public class GatewayApplication {
 
 	public static void main(String[] args) {

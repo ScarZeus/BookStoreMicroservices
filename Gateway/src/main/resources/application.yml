@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: Gateway   # 2 spaces, not 4
+
+
+server:
+  port: 5005
+

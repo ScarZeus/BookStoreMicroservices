@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: DiscoveryServer
+
+server:
+  port: 5005
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
