@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: BookService
+  datasource:
+    url: jdbc:postgresql://localhost:2427/bookMicroservices
+    username: postgres
+    password: kevin.2427
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+server:
+  port: 5010
+
+

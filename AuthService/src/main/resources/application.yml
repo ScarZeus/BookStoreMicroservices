@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: AuthService
+  datasource:
+    url: jdbc:postgresql://localhost:2427/bookMicroservices
+    username: postgres
+    password: kevin.2427
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 5000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:5005/eureka/
+
+
+
+security:
+  google:
+    clientId: 157786581466-naim580fbihv04vdrc0i6agrhq8pm6ud.apps.googleusercontent.com
+    clientSecret: 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
+
+
+
