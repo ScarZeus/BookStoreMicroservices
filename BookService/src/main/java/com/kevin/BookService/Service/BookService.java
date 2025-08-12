@@ -118,4 +118,16 @@ public class BookService {
     }
 
 
+    public void updateAllBooks(List<BookModel> books) {
+        try{
+            for(BookModel book : books){
+                if(book.isInStocks() && book.getStockCount()==0){
+                    book.setInStocks(false);
+                }
+                updateBook(book);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
