@@ -16,6 +16,17 @@ import java.util.Optional;
 public interface BookRepo extends JpaRepository<BookModel,Long> {
 
 
-    @Query("SELECT book FROM BookModel book WHERE book.title ILIKE %:bookName%")
-    Optional<List<BookModel>> findAllByTitle(@Param("bookName") String bookName);
+    @Query("""
+    SELECT book 
+    FROM BookModel book 
+    WHERE LOWER(book.title) LIKE LOWER(CONCAT('%', :bookName, '%')) 
+       OR (:isbnNO IS NULL OR :isbnNO = '' OR book.isbn LIKE CONCAT('%', :isbnNO, '%'))
+""")
+    List<BookModel> findAllByTitleOrIsbn(@Param("bookName") String bookName,
+                                         @Param("isbnNO") String isbnNO);
+
+
+    @Query("SELECT CASE WHEN COUNT(book) > 0 THEN TRUE ELSE FALSE END FROM BookModel book WHERE book.isbn = :isbn")
+    boolean existsByIsbn(@Param("isbn") String isbn);
+
 }

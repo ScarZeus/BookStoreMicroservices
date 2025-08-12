@@ -11,4 +11,6 @@ public class AuthServiceConfig {
     BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder(12);
     }
+
+
 }

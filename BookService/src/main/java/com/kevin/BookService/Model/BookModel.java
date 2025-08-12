@@ -4,33 +4,44 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @ToString
-public class BookModel {
+public class BookModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
     private String author;
+
     @Column(columnDefinition = "text")
     private String description;
+
     private String isbn;
+
     private Double price;
+
     private String coverImageUrl;
-    @ElementCollection
-    @CollectionTable(name = "book_gallery", joinColumns = @JoinColumn(name = "book_id"))
-    @Column(name = "image_url")
-    private List<String> galleryUrls;
+
+    private boolean inStocks;
+
+    private Long stockCount;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ImageModel> images;
+
     private Instant publishedAt;
+
     private Instant createdAt = Instant.now();
+
     private Instant updatedAt = Instant.now();
 
     @PreUpdate

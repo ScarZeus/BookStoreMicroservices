@@ -21,6 +21,12 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 
+cloudinary:
+  config:
+    cloudName: dz36f7lni
+    clientId: 827236279878875
+    clientSecret: at0M7fDTwe8MBc6jtth5GFrcU2s
+
 server:
   port: 5010
 
