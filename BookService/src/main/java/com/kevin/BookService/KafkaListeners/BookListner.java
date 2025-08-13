@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BookListner {
@@ -14,13 +16,13 @@ public class BookListner {
     private final BookService bookService;
 
     @KafkaListener(topics = "book-stock-update", groupId = "book-service")
-    public void updateAllBooks(CartItemModel cart){
-        for(BookModel book : cart.getBooks()){
-            book.setStockCount(book.getStockCount()- cart.getCount());
-            if(book.isInStocks() && book.getStockCount()<1){
-                book.setInStocks(true);
-                book.setStockCount((long) 0);
-            }
+    public void updateAllBooks(List<CartItemModel> cart){
+        for(CartItemModel item : cart){
+           BookModel book = item.getBook();
+           book.setStockCount(book.getStockCount()-item.getCount());
+           if(book.getStockCount()<1 && book.isInStocks()){
+               book.setInStocks(false);
+           }
             bookService.updateBook(book);
         }
     }

@@ -2,7 +2,6 @@ package com.kevin.BookService.Model;
 
 import lombok.*;
 
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -10,6 +9,12 @@ import java.util.List;
 @Getter
 @Setter
 public class CartItemModel {
-    private List<BookModel> books;
+
+    private Long cartId;
+
+    private BillModel bill;
+
+    private BookModel book;
+
     private Long count;
 }

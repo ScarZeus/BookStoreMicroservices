@@ -1,6 +1,6 @@
 spring:
   application:
-    name: BookService
+    name: OrderService
 
   datasource:
     url: jdbc:postgresql://localhost:2427/bookMicroservices
@@ -34,11 +34,8 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 
-cloudinary:
-  config:
-    cloudName: dz36f7lni
-    clientId: 827236279878875
-    clientSecret: at0M7fDTwe8MBc6jtth5GFrcU2s
+
 
 server:
-  port: 5010
+  port: 5015
+

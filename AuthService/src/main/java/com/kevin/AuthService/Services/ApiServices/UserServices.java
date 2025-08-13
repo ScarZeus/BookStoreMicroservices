@@ -22,6 +22,12 @@ public class UserServices {
         return user;
     }
 
+    public UserModel getUserByUserId(Long userId){
+        UserModel user = Optional.ofNullable(userRepo.findById(userId))
+                .get().orElseThrow(() -> new RuntimeException("User not found of the Given User ID : "+userId));
+        return user;
+    }
+
     public UserModel createNewUser(UserModel user){
         try{
             if(userRepo.existsByEmailAddress(user.getEmailAddress())){
