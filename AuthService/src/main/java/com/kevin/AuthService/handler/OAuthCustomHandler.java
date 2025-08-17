@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -50,8 +51,9 @@ public class OAuthCustomHandler implements AuthenticationSuccessHandler {
         user.setPassword(null);
         user.setAuthProvider(AuthProvider.GOOGLE);
 
-        if (!userServices.doesUserExistsByEmail(email)) {
-            userServices.createNewUser(user);
+        if (userServices.getUserByEmailAddress(user.getEmailAddress()).getBody()!=null &&
+                userServices.getUserByEmailAddress(user.getEmailAddress()).getStatusCode()== HttpStatusCode.valueOf(400)) {
+            userServices.addNewUser(user).getBody();
         }
 
 

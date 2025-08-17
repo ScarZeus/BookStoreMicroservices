@@ -2,6 +2,7 @@ spring:
   application:
     name: DiscoveryServer
 
+
 server:
   port: 5005
 
@@ -12,4 +13,7 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+
+
 

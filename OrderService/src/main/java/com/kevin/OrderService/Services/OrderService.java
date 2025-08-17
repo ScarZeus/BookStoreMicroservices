@@ -18,6 +18,7 @@ public class OrderService {
 
     private final OrderRepo billRepo;
     private final BookEventProducer producer;
+    private final UserServices userServices;
 
     public BillModel createBill(UserModel user, List<CartItemModel> items) {
         BillModel bill = new BillModel();
@@ -34,8 +35,9 @@ public class OrderService {
         return billRepo.save(bill);
     }
 
-    public List<BillModel> getBillByUser(UserModel user){
+    public List<BillModel> getBillByUser(String email){
         try {
+            UserModel user = userServices.getUserByEmailAddress(email).getBody();
             List<BillModel> bills = billRepo.findAllByUser(user);
             if(bills==null || bills.isEmpty()){
                 return new ArrayList<>();
@@ -47,4 +49,15 @@ public class OrderService {
     }
 
 
+    public void cancelBill(Long billId) {
+        try{
+            if(billRepo.existsById(billId)){
+                BillModel bill = billRepo.findById(billId).orElse(null);
+                billRepo.delete(bill);
+            }
+        }
+        catch (Exception e){
+            throw new RuntimeException("No Bill");
+        }
+    }
 }

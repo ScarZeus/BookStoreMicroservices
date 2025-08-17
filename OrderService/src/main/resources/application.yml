@@ -27,14 +27,9 @@ spring:
         spring.json.trusted.packages: "*"
 
 eureka:
-  instance:
-    hostname: localhost
-    prefer-ip-address: false
   client:
-    register-with-eureka: false
-    fetch-registry: false
-
-
+    serviceUrl:
+      defaultZone: http://localhost:5005/eureka/
 
 server:
   port: 5015

@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,7 +30,7 @@ public class AuthenticationService {
                     )
             );
 
-            UserModel user = userService.getUserByEmailAddress(request.getEmailAddress());
+            UserModel user = userService.getUserByEmailAddress(request.getEmailAddress()).getBody();
             String jwtToken = jwtService.generateJwtTokenWithUserDetails(user);
             return AuthResponseModel.builder()
                     .responseStatus(ResponseStatus.SUCCESS)
@@ -51,7 +50,7 @@ public class AuthenticationService {
     public AuthResponseModel authenticateNewUser(UserModel user) {
 
         try {
-            UserModel savedUser = userService.createNewUser(user);
+            UserModel savedUser = userService.addNewUser(user).getBody();
             authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             savedUser.getEmailAddress(),
@@ -77,7 +76,7 @@ public class AuthenticationService {
 
     public ValidatedTokenModel authenticateToken(String jwtToken) {
         String userId = jwtService.extractUsername(jwtToken);
-        UserDetails userDetails = userService.getUserByEmailAddress(userId);
+        UserDetails userDetails = userService.getUserByEmailAddress(userId).getBody();
         if(jwtService.isValidToken(userId,userDetails)){
             return ValidatedTokenModel.builder()
                     .response(ResponseStatus.SUCCESS)

@@ -29,4 +29,11 @@ security:
     clientSecret: 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
 
 
+# 🔹 Debug configuration
+debug: true
+
+logging:
+  level:
+    root: INFO
+
 

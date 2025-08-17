@@ -1,17 +1,15 @@
-package com.kevin.AuthService.Services.ApiServices;
+package com.kevin.OrderService.Services;
 
-import com.kevin.AuthService.Model.UserModel;
+import com.kevin.OrderService.Model.UserModel;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "UserService",url = "http://localhost:5000/api/v1/user")
+@FeignClient(name = "UserServices",url = "http://localhost:5020/api/v1/user")
 public interface UserServices {
-
     @GetMapping("/getUserByEmail")
     public ResponseEntity<UserModel> getUserByEmailAddress(@RequestParam("email") String email);
 

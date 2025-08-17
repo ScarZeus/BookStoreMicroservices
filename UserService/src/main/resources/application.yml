@@ -1,1 +1,25 @@
-spring.application.name=UserService
+spring:
+  application:
+    name: UserService
+  datasource:
+    url: jdbc:postgresql://localhost:2427/bookMicroservices
+    username: postgres
+    password: kevin.2427
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 5020
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:5005/eureka/
+
+
+

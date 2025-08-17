@@ -27,12 +27,11 @@ spring:
         spring.json.trusted.packages: "*"
 
 eureka:
-  instance:
-    hostname: localhost
-    prefer-ip-address: false
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:5005/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 
 cloudinary:
   config:

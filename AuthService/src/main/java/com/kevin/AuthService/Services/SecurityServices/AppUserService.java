@@ -13,9 +13,10 @@ import org.springframework.stereotype.Service;
 public class AppUserService implements UserDetailsService {
 
     private final UserServices userDbService;
+    
     @Override
     public UserDetails loadUserByUsername(String emailAddress) throws UsernameNotFoundException {
-        return userDbService.getUserByEmailAddress(emailAddress);
+        return userDbService.getUserByEmailAddress(emailAddress).getBody();
     }
 
 

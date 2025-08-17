@@ -21,9 +21,9 @@ public class BillController {
         return ResponseEntity.ok(bill);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<BillModel>> getBillsByUser(@PathVariable Long userId) {
-        List<BillModel> bills = billingService.getBillByUser(userId);
+    @GetMapping("/user/{email}")
+    public ResponseEntity<List<BillModel>> getBillsByUser(@PathVariable String email) {
+        List<BillModel> bills = billingService.getBillByUser(email);
         return ResponseEntity.ok(bills);
     }
 
