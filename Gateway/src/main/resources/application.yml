@@ -1,8 +1,21 @@
 spring:
   application:
-    name: Gateway   # 2 spaces, not 4
+    name: Gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
 
 
 server:
   port: 5005
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:5005/eureka/
+
 
