@@ -11,7 +11,7 @@ spring:
 
 
 server:
-  port: 5005
+  port: 5025
 
 eureka:
   client:

@@ -67,16 +67,6 @@ public class BookController {
         }
     }
 
-    @PostMapping("/updateAllBooks")
-    public ResponseEntity<?> updateAllBooks(List<BookModel> book){
-        try{
-            bookService.updateAllBooks(book);
-            return ResponseEntity.ok(null);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.toString());
-        }
-    }
-
 
     @Cacheable(value = "booksByName", key = "#title + '-' + #ibsn")
     @GetMapping("/getBooks")
