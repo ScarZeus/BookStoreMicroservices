@@ -23,7 +23,6 @@ public class BookController {
     private final BookService bookService;
 
 
-    @Cacheable(value = "books")
     @GetMapping("/getAllBooks")
     public ResponseEntity<List<BookModel>> getAllBooks(){
         try{
@@ -33,7 +32,7 @@ public class BookController {
         }
     }
 
-    @CacheEvict(value = "books", allEntries = true)
+
     @PostMapping(value = "/addBook",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BookModel> addBook(@RequestPart("book") BookModel book,
                                              @RequestPart("bookImages")MultipartFile[] images
@@ -46,7 +45,6 @@ public class BookController {
       }
     }
 
-    @CacheEvict(value = "books", allEntries = true)
     @DeleteMapping("/delete")
     public ResponseEntity<?> deletBook(BookModel book){
         try{
@@ -56,7 +54,7 @@ public class BookController {
         }
     }
 
-    @CacheEvict(value = "books", allEntries = true)
+
     @PostMapping("/update")
     public ResponseEntity<?> updateBook(BookModel book){
         try{
@@ -68,7 +66,6 @@ public class BookController {
     }
 
 
-    @Cacheable(value = "booksByName", key = "#title + '-' + #ibsn")
     @GetMapping("/getBooks")
     public ResponseEntity<List<BookModel>> getBooks(@RequestParam("name") String title,@RequestParam("ibsno") String ibsn){
         try{

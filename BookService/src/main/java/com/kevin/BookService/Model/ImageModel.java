@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Setter
-@ToString
-public class ImageModel {
+@ToString(exclude = "book") // prevent recursion in toString
+public class ImageModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

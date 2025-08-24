@@ -9,6 +9,9 @@ import com.kevin.BookService.Repository.BookRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -28,31 +31,27 @@ public class BookService {
     private Cloudinary cloudinary;
 
 
-    public List<BookModel> getAllBooks(){
-        try{
-            List<BookModel> books = bookDao.findAll();
-            if (books.isEmpty() || books == null){
-                throw new RuntimeException("No Books Found");
-            }
-            return books;
+    @Cacheable(value = "books")
+    public List<BookModel> getAllBooks() {
+        List<BookModel> books = bookDao.findAll();
+        if (books == null || books.isEmpty()) {
+            throw new RuntimeException("No Books Found");
         }
-        catch (Exception e){
-            return new ArrayList<>();
-        }
+        return books;
     }
 
-    public List<BookModel> getAllBooksByName(String bookName,String ibsnNO){
-        try {
-            List<BookModel> books = bookDao.findAllByTitleOrIsbn(bookName,ibsnNO);
-            if(books==null && books.isEmpty()){
-                throw new RuntimeException("No Books Found");
-            }
-            return books;
-        } catch (Exception e) {
-            return new ArrayList<>();
+
+    @Cacheable(value = "booksByName", key = "#bookName + '_' + #isbnNO")
+    public List<BookModel> getAllBooksByName(String bookName, String isbnNO) {
+        List<BookModel> books = bookDao.findAllByTitleOrIsbn(bookName, isbnNO);
+        if (books == null || books.isEmpty()) {
+            throw new RuntimeException("No Books Found");
         }
+        return books;
     }
 
+
+    @CacheEvict(value = {"books", "booksByName"}, allEntries = true)
     public BookModel saveBook(BookModel book, MultipartFile[] images) {
         try {
             if (bookDao.existsByIsbn(book.getIsbn())) {
@@ -61,56 +60,55 @@ public class BookService {
 
             List<ImageModel> imageList = new ArrayList<>();
 
-            // Upload each image to Cloudinary and create ImageModel
             for (MultipartFile file : images) {
                 if (!file.isEmpty()) {
-                    Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
-                            "folder", "books/" + book.getIsbn() // optional folder structure
-                    ));
+                    Map uploadResult = cloudinary.uploader().upload(
+                            file.getBytes(),
+                            ObjectUtils.asMap("folder", "books/" + book.getIsbn())
+                    );
 
                     String imageUrl = uploadResult.get("secure_url").toString();
 
                     ImageModel img = new ImageModel();
                     img.setUrl(imageUrl);
-                    img.setBook(book); // important for bidirectional mapping
+                    img.setBook(book);
 
                     imageList.add(img);
                 }
             }
 
-            // Set images in BookModel
             book.setImages(imageList);
-
             return bookDao.save(book);
 
         } catch (IOException e) {
             throw new RuntimeException("Error uploading image to Cloudinary", e);
         }
     }
-    public void updateBook(BookModel book){
-        if(!bookDao.existsByIsbn(book.getIsbn())){
-            bookDao.save(book);
+
+
+    @CachePut(value = "books", key = "#book.id")
+    public BookModel updateBook(BookModel book) {
+        if (!bookDao.existsByIsbn(book.getIsbn())) {
+            throw new RuntimeException("Book not found for update");
         }
+        return bookDao.save(book);
     }
 
 
-
     @Transactional
+    @CacheEvict(value = {"books", "booksByName"}, allEntries = true)
     public void deleteBook(BookModel book) {
         if (bookDao.existsById(book.getId())) {
             try {
-                // 1️⃣ Delete gallery images from Cloudinary
                 if (book.getImages() != null) {
                     for (ImageModel image : book.getImages()) {
-                        if (image.getPublicId() != null) {
-                            cloudinary.uploader().destroy(image.getPublicId(), ObjectUtils.emptyMap());
+                        // only delete if publicId is present
+                        if (image.getUrl() != null) {
+                            cloudinary.uploader().destroy(image.getUrl(), ObjectUtils.emptyMap());
                         }
                     }
                 }
-
-                // 3️⃣ Delete the book from DB
                 bookDao.delete(book);
-
             } catch (IOException e) {
                 throw new RuntimeException("Failed to delete image(s) from Cloudinary", e);
             }
@@ -118,16 +116,13 @@ public class BookService {
     }
 
 
+    @CacheEvict(value = {"books", "booksByName"}, allEntries = true)
     public void updateAllBooks(List<BookModel> books) {
-        try{
-            for(BookModel book : books){
-                if(book.isInStocks() && book.getStockCount()==0){
-                    book.setInStocks(false);
-                }
-                updateBook(book);
+        for (BookModel book : books) {
+            if (book.isInStocks() && book.getStockCount() == 0) {
+                book.setInStocks(false);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            updateBook(book);
         }
     }
 }
