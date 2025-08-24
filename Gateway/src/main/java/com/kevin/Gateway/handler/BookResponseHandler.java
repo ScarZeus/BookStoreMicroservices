@@ -15,11 +15,12 @@ public class BookResponseHandler {
     }
 
     public Mono<ServerResponse> getAllBooks(ServerRequest request) {
+        System.out.println("Check 1");
         return webClient.get()
-                .uri("/books/getAllBooks")
+                .uri("/api/v1/books/getAllBooks")
                 .retrieve()
                 .bodyToMono(String.class)
-                .flatMap(body -> ServerResponse.ok().bodyValue(body))  // <- use bodyValue
+                .flatMap(body -> ServerResponse.ok().bodyValue(body))
                 .onErrorResume(e -> ServerResponse.status(500).bodyValue(e.getMessage()));
     }
 
