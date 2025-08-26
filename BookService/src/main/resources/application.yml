@@ -7,11 +7,6 @@ spring:
     username: postgres
     password: kevin.2427
     driver-class-name: org.postgresql.Driver
-#  cache:
-#    type: redis
-#  redis:
-#    host: 127.0.0.1
-#    port: 6379
   jpa:
     hibernate:
       ddl-auto: update
