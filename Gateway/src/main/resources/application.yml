@@ -2,13 +2,13 @@ spring:
   application:
     name: Gateway
 
-
-
-
 server:
   port: 5025
 
 eureka:
+  instance:
+    ip-address: 127.0.0.1
+    hostname: localhost
   client:
     serviceUrl:
       defaultZone: http://localhost:5005/eureka/

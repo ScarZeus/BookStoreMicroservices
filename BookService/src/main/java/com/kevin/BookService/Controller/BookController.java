@@ -28,6 +28,7 @@ public class BookController {
         try{
             return new ResponseEntity(bookService.getAllBooks(), HttpStatusCode.valueOf(200));
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(new ArrayList<>());
         }
     }

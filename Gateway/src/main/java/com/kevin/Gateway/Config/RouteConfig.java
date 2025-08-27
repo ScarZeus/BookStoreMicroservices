@@ -13,12 +13,16 @@ public class RouteConfig {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
+                // Book Service through Eureka
                 .route("book-service", r -> r.path("/api/v1/books/**")
-                        .uri("http://localhost:5010"))
+                        .uri("lb://BOOK-SERVICE"))
+
+                // User Service through Eureka
                 .route("user-service", r -> r.path("/api/v1/users/**")
                         .uri("lb://USER-SERVICE"))
 
                 .build();
     }
+
 }
 

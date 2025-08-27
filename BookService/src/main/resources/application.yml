@@ -1,6 +1,6 @@
 spring:
   application:
-    name: BookService
+    name: book-service
 
   datasource:
     url: jdbc:postgresql://localhost:2427/bookMicroservices
@@ -26,6 +26,9 @@ spring:
         spring.json.trusted.packages: "*"
 
 eureka:
+  instance:
+    ip-address: 127.0.0.1
+    hostname: localhost
   client:
     service-url:
       defaultZone: http://localhost:5005/eureka/

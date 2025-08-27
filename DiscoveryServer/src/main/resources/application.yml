@@ -9,10 +9,10 @@ server:
 eureka:
   instance:
     hostname: localhost
-    prefer-ip-address: false
+    ip-address: 127.0.0.1
   client:
-    register-with-eureka: false
     fetch-registry: false
+    register-with-eureka: false
 
 
 
