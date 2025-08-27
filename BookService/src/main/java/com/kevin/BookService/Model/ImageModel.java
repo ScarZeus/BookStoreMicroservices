@@ -1,5 +1,6 @@
 package com.kevin.BookService.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,5 +24,6 @@ public class ImageModel implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
+    @JsonIgnore
     private BookModel book;
 }

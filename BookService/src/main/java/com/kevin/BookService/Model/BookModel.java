@@ -9,42 +9,42 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@ToString
-public class BookModel implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Entity
+    @Getter
+    @Setter
+    @ToString
+    public class BookModel implements Serializable {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    private String title;
-    private String author;
+        private String title;
+        private String author;
 
-    @Column(columnDefinition = "text")
-    private String description;
+        @Column(columnDefinition = "text")
+        private String description;
 
-    private String isbn;
+        private String isbn;
 
-    private Double price;
+        private Double price;
 
-    private String coverImageUrl;
+        private String coverImageUrl;
 
-    private boolean inStocks;
+        private boolean inStocks;
 
-    private Long stockCount;
+        private Long stockCount;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ImageModel> images;
+        @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+        private List<ImageModel> images;
 
-    private Instant publishedAt;
+        private Instant publishedAt;
 
-    private Instant createdAt = Instant.now();
+        private Instant createdAt = Instant.now();
 
-    private Instant updatedAt = Instant.now();
+        private Instant updatedAt = Instant.now();
 
-    @PreUpdate
-    public void preUpdate() { updatedAt = Instant.now(); }
+        @PreUpdate
+        public void preUpdate() { updatedAt = Instant.now(); }
 
 
-}
+    }
