@@ -15,7 +15,7 @@ public class BillController {
 
     private final OrderService billingService;
 
-    @PostMapping
+    @PostMapping("/createBill")
     public ResponseEntity<BillModel> createBill(@RequestBody BillModel request) {
         BillModel bill = billingService.createBill(request.getUser(), request.getCartItems());
         return ResponseEntity.ok(bill);
@@ -27,8 +27,7 @@ public class BillController {
         return ResponseEntity.ok(bills);
     }
 
-    // 3️⃣ Cancel a bill
-    @DeleteMapping("/{billId}")
+    @DeleteMapping("/deleteBill/{billId}")
     public ResponseEntity<String> cancelBill(@PathVariable Long billId) {
         billingService.cancelBill(billId);
         return ResponseEntity.ok("Bill cancelled successfully");

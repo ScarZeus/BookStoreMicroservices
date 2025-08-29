@@ -1,9 +1,7 @@
-package com.kevin.Gateway;
+package com.kevin.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-
 
 @SpringBootApplication
 public class GatewayApplication {
